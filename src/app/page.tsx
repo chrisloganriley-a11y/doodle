@@ -1,69 +1,172 @@
-import Image from "next/image";
+import { DayLine } from "@/components/DayLine";
+import { Drawing } from "@/components/Drawing";
+import { roasts } from "@/components/roasts";
+import { SignupForm } from "@/components/SignupForm";
+
+function Wordmark({ className = "" }: { className?: string }) {
+  // The drawn wordmark, as drawn. Never retyped.
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/brand/doodle-wordmark-periwinkle.svg" alt="doodle" className={className} />;
+}
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
+    <>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-doodle focus:bg-paper focus:px-4 focus:py-2"
+      >
+        skip to the coffee
+      </a>
+
+      <header className="sticky top-0 z-40 bg-paper/95 px-[var(--gutter)]">
+        <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between gap-8">
+          <a href="#top" aria-label="doodle, back to the top" className="shrink-0">
+            <Wordmark className="h-auto w-[104px] sm:w-[124px]" />
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+          <div className="hidden w-full max-w-[340px] md:block">
+            <DayLine compact />
+          </div>
+          <a href="#say-hi" className="link-hl inline-flex min-h-11 shrink-0 items-center text-[15px]">
+            say hi →
           </a>
         </div>
+      </header>
+
+      <main id="main">
+        {/* first viewport: the offer, the action, and the day */}
+        <section
+          id="top"
+          className="flex min-h-[calc(100svh-72px)] flex-col justify-between px-[var(--gutter)] pb-8 pt-10 sm:pt-16"
+        >
+          <div className="mx-auto w-full max-w-[1280px]">
+            <h1 className="serif max-w-[11ch] text-[clamp(46px,8.4vw,96px)] leading-[0.98]">
+              coffee for every part of your <span className="hl">day</span>.
+            </h1>
+            <p className="mt-8 max-w-[46ch] text-[15px] sm:text-[16px]">
+              pretty good coffee, roasted in philly. a little cart is coming to philly sidewalks,
+              with three bags you can take home.
+            </p>
+            <div className="mt-8">
+              <SignupForm />
+            </div>
+          </div>
+          <div className="mx-auto mt-14 w-full max-w-[1280px]">
+            <DayLine />
+          </div>
+        </section>
+
+        {/* the day, one roast at a time */}
+        {roasts.map((r, i) => {
+          const flip = i % 2 === 1;
+          return (
+            <section
+              key={r.id}
+              id={r.id}
+              aria-labelledby={`${r.id}-name`}
+              className="px-[var(--gutter)] py-20 sm:py-28"
+            >
+              <div className="mx-auto grid max-w-[1280px] items-center gap-x-16 gap-y-6 md:grid-cols-2">
+                <div className={flip ? "md:order-2" : ""}>
+                  <Drawing
+                    d={r.drawing}
+                    label={r.drawingLabel}
+                    className="mx-auto block w-[min(68vw,300px)] md:w-[min(38vw,440px)]"
+                  />
+                </div>
+                <div className={flip ? "md:order-1 md:justify-self-end" : ""}>
+                  <p className="text-[15px] tabular-nums">
+                    <time>{r.time}</time>
+                  </p>
+                  <h2
+                    id={`${r.id}-name`}
+                    className="serif mt-5 text-[clamp(52px,7vw,84px)]"
+                  >
+                    <span className="hl" data-roast={r.id}>
+                      {r.name}
+                    </span>
+                  </h2>
+                  <p className="mt-4 text-[15px]">{r.level}</p>
+                  <p className="mt-8 max-w-[40ch] text-[16px] lowercase">{r.moment}</p>
+                  <dl className="mt-8 grid max-w-[44ch] gap-5 text-[15px]">
+                    <div>
+                      <dt className="font-medium">tastes like</dt>
+                      <dd>{r.tastesLike}</dd>
+                    </div>
+                    <div>
+                      <dt className="font-medium">best for</dt>
+                      <dd>{r.bestFor}</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </section>
+          );
+        })}
+
+        {/* the cart, and the bag you take home */}
+        <section aria-labelledby="cart" className="bg-mist px-[var(--gutter)] py-20 text-navy sm:py-28">
+          <div className="mx-auto grid max-w-[1280px] gap-x-16 gap-y-12 md:grid-cols-[1.1fr_1fr]">
+            <div>
+              <h2 id="cart" className="serif max-w-[12ch] text-[clamp(40px,5.4vw,68px)] text-ink">
+                a white cart, three bags and a few good cups.
+              </h2>
+            </div>
+            <div className="grid gap-10 self-end text-[15px]">
+              <div>
+                <h3 className="font-medium">the cart</h3>
+                <p className="mt-2 max-w-[48ch]">
+                  hot coffee, iced coffee and lattes, from a little white cart with a big doodle on
+                  the front. we&apos;re sorting out the permits now. once we&apos;re rolling, this is
+                  where you&apos;ll find where we&apos;re parked each weekend.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-medium">the bag</h3>
+                <p className="mt-2 max-w-[48ch]">
+                  12 oz of whole bean, roasted in philly. take one home from the cart, or have one
+                  sent to you once the shop opens.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-medium">where, roughly</h3>
+                <p className="mt-2 max-w-[48ch]">
+                  we&apos;re eyeing fishtown, northern liberties, passyunk and a farmers market or
+                  two. nothing&apos;s booked yet.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* the close */}
+        <section
+          id="say-hi"
+          aria-labelledby="say-hi-heading"
+          className="px-[var(--gutter)] pb-16 pt-24 sm:pt-32"
+        >
+          <div className="mx-auto max-w-[1280px]">
+            <h2 id="say-hi-heading" className="serif max-w-[14ch] text-[clamp(44px,7vw,84px)]">
+              see you tomorrow morning.
+            </h2>
+            <p className="mt-6 max-w-[44ch] text-[15px]">
+              or the morning after. leave your email and we&apos;ll tell you when and where the cart
+              is out.
+            </p>
+            <div className="mt-8">
+              <SignupForm />
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <footer className="px-[var(--gutter)] pb-10">
+        <div className="mx-auto flex max-w-[1280px] flex-col gap-6 border-t border-ink/30 pt-8 text-[13px] sm:flex-row sm:items-end sm:justify-between">
+          <Wordmark className="h-auto w-[96px]" />
+          <p>pretty good coffee, roasted in philly, pa.</p>
+          <p>© 2026 doodle</p>
+        </div>
+      </footer>
+    </>
   );
 }

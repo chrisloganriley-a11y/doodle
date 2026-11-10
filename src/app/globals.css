@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
+/* doodle tokens (brand/tokens/tokens.css), wired into Tailwind. */
+@theme {
+  --color-paper: #ffffff;
+  --color-mist: #eef0f8;
+  --color-ink: #4f57d6; /* periwinkle: the one ink */
+  --color-navy: #1e2366;
+  --color-blush: #ffb8cd;
+  --color-butter: #ffe066;
+  --color-lilac: #cfc6ff;
+
+  --font-serif: var(--font-fraunces), Georgia, serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+
+  --radius-doodle: 10px;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gutter: clamp(20px, 5vw, 72px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.65;
+  text-transform: lowercase;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The parts the browser draws still carry the ink. */
+::selection {
+  background: var(--color-butter);
+  color: var(--color-navy);
+}
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+input {
+  caret-color: var(--color-ink);
+}
+a {
+  color: inherit;
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+}
+
+.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  text-transform: lowercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* One chisel highlighter under one word. Set data-roast for the colour. */
+.hl {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  /* Overhang mostly on the left, so punctuation after the word stays close. */
+  padding: 0 0.06em 0 0.2em;
+  margin: 0 0 0 -0.2em;
+  --hl: var(--color-butter);
+  --hl-mask: url("/brand/highlighter-the-usual.svg");
+}
+.hl::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -0.12em;
+  right: -0.04em;
+  bottom: -0.1em;
+  height: 0.42em;
+  background: var(--hl);
+  -webkit-mask: var(--hl-mask) center / 100% 100% no-repeat;
+  mask: var(--hl-mask) center / 100% 100% no-repeat;
+}
+.hl[data-roast="daydream"] {
+  --hl: var(--color-blush);
+  --hl-mask: url("/brand/highlighter-daydream.svg");
+}
+.hl[data-roast="late-show"] {
+  --hl: var(--color-lilac);
+  --hl-mask: url("/brand/highlighter-late-show.svg");
+}
+
+/* The highlighter on a secondary link, on hover only. */
+.link-hl {
+  position: relative;
+  text-decoration: none;
+  isolation: isolate;
+}
+.link-hl::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: -6px;
+  right: -6px;
+  bottom: -1px;
+  height: 0.6em;
+  background: var(--color-butter);
+  -webkit-mask: url("/brand/highlighter-the-usual.svg") center / 100% 100% no-repeat;
+  mask: url("/brand/highlighter-the-usual.svg") center / 100% 100% no-repeat;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms var(--ease-out);
+}
+.link-hl:hover::before,
+.link-hl:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Drawings draw themselves once, as they arrive. Visible by default. */
+.drawing path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.drawing[data-state="armed"] path {
+  stroke-dashoffset: 1;
+}
+.drawing[data-state="drawn"] path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 2200ms var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .drawing path,
+  .drawing[data-state] path {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+  .link-hl::before {
+    transition: none;
+  }
 }

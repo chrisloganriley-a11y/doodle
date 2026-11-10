@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "doodle",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  },
+  // Needs doodlecoffee.shop active as a zone in this Cloudflare account first
+  // (Porkbun nameservers pointed at Cloudflare). Wrangler creates the DNS record.
+  // www redirects to the bare domain with a Cloudflare redirect rule (see README).
+  "routes": [{ "pattern": "doodlecoffee.shop", "custom_domain": true }]
+}

@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# doodle — website
 
-## Getting Started
+pretty good coffee, roasted in philly. The site for [doodlecoffee.shop](https://doodlecoffee.shop).
 
-First, run the development server:
+Next.js static export + Tailwind, served by Cloudflare Workers static assets. Brand kit in `brand/`, product record in `PRODUCT.md`.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # static site in ./out
+npm run preview    # build, then serve it the way Cloudflare will
+npm run deploy     # build, then wrangler deploy
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Email signup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The form POSTs `email` to `NEXT_PUBLIC_SIGNUP_ENDPOINT`, which is read at build time. Until that's set, the form says signups aren't on yet; it never pretends to save an address. Set it in `.env.local` (dev) and in the build environment (deploy) once a provider is picked.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Domain: Porkbun → Cloudflare (one time)
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Cloudflare:** Add a site → `doodlecoffee.shop` → Free plan. Cloudflare shows two nameservers.
+2. **Porkbun:** Domain Management → doodlecoffee.shop → Authoritative Nameservers → replace Porkbun's with the two Cloudflare ones. Delete Porkbun's default parking/URL-forward records first, if any. Turn DNSSEC off at Porkbun until the move is done.
+3. Wait for Cloudflare to say the zone is **Active** (minutes to a few hours).
+4. `npx wrangler login`, then `npm run deploy`. The `routes` entry in `wrangler.jsonc` attaches `doodlecoffee.shop` and creates its DNS record.
+5. **www → bare domain:** in Cloudflare DNS, add `AAAA www 100::` (proxied). Then Rules → Redirect Rules → "Redirect from WWW to root" template → 301 to `https://doodlecoffee.shop${path}`, keeping the query string.
+6. SSL/TLS → Edge Certificates: turn on Always Use HTTPS.

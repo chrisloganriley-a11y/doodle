@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Build plain HTML/CSS/JS into ./out, served by Cloudflare as static assets.
+  output: "export",
+  // The default image optimizer needs a server, which a static export lacks.
+  images: { unoptimized: true },
   turbopack: {
     rules: {
       "*.css": {

@@ -1,0 +1,91 @@
+/* doodle brand tokens. Import once, before your own styles. */
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,400..700,0..100,0..1&family=DM+Mono:wght@400;500&display=swap");
+
+:root {
+  /* color */
+  --paper: #FFFFFF;
+  --mist: #EEF0F8;
+  --periwinkle: #4F57D6;
+  --navy: #1E2366;
+  --blush: #FFB8CD;   /* daydream highlighter */
+  --butter: #FFE066;  /* the usual highlighter */
+  --lilac: #CFC6FF;   /* late show highlighter */
+
+  /* type */
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "DM Mono", ui-monospace, monospace;
+  --serif-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+
+  --text-roast: 42px;
+  --text-headline: clamp(40px, 6vw, 72px);
+  --text-body: 15px;
+  --text-small: 13px;
+
+  /* space and shape */
+  --space-2: 8px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-12: 48px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--periwinkle);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  line-height: 1.6;
+}
+
+.doodle-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 600;
+  font-variation-settings: var(--serif-settings);
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+/* one highlighter under a word; set --hl to the roast color */
+.doodle-highlight {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+  padding: 0 0.22em;
+  margin: 0 -0.22em;
+}
+.doodle-highlight::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: -0.14em;
+  height: 0.5em;
+  background: var(--hl);
+  -webkit-mask: var(--hl-mask) center / 100% 100% no-repeat;
+          mask: var(--hl-mask) center / 100% 100% no-repeat;
+}
+.doodle-highlight,
+.doodle-highlight[data-roast="the-usual"] { --hl: var(--butter); --hl-mask: url("../assets/highlighters/highlighter-the-usual.svg"); }
+.doodle-highlight[data-roast="daydream"] { --hl: var(--blush); --hl-mask: url("../assets/highlighters/highlighter-daydream.svg"); }
+.doodle-highlight[data-roast="late-show"] { --hl: var(--lilac); --hl-mask: url("../assets/highlighters/highlighter-late-show.svg"); }
+
+.doodle-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--periwinkle);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  text-transform: lowercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+.doodle-button:focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
