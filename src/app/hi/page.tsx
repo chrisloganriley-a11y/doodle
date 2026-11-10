@@ -36,7 +36,7 @@ const brew: Record<string, { method: string; steps: string[] }> = {
     steps: [
       "about 60 g coffee per litre of water, or two tablespoons per mug.",
       "medium grind, like sand.",
-      "drink it after 3pm and sleep anyway.",
+      "drink it late and sleep anyway.",
     ],
   },
 };

@@ -113,14 +113,9 @@ export function DayLine({ compact = false }: { compact?: boolean }) {
                 i === 0 ? "items-start" : i === 1 ? "items-center" : "items-end"
               } ${compact ? "py-1" : "min-h-11 py-2"}`}
             >
-              <span
-                className={`tabular-nums ${compact ? "text-[12px]" : "text-[13px] sm:text-[15px]"} ${
-                  active === i ? "font-medium" : ""
-                }`}
-              >
-                {r.time}
-              </span>
-              {!compact && (
+              {compact ? (
+                <span className={`text-[12px] ${active === i ? "font-medium" : ""}`}>{r.name}</span>
+              ) : (
                 <span className="serif text-[20px] group-hover:underline group-hover:decoration-1 group-hover:underline-offset-4 sm:text-[26px]">
                   {r.name}
                 </span>

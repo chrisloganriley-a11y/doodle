@@ -97,12 +97,9 @@ export default function Home() {
                   />
                 </div>
                 <div className={flip ? "md:order-1 md:justify-self-end" : ""}>
-                  <p className="text-[15px] tabular-nums">
-                    <time>{r.time}</time>
-                  </p>
                   <h2
                     id={`${r.id}-name`}
-                    className="serif mt-5 text-[clamp(52px,7vw,84px)]"
+                    className="serif text-[clamp(52px,7vw,84px)]"
                   >
                     <span className="hl" data-roast={r.id}>
                       {r.name}

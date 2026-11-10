@@ -4,7 +4,6 @@
 export type Roast = {
   id: "daydream" | "the-usual" | "late-show";
   name: string;
-  time: string;
   level: string;
   moment: string;
   tastesLike: string;
@@ -17,11 +16,10 @@ export const roasts: Roast[] = [
   {
     id: "daydream",
     name: "daydream",
-    time: "7:40am",
-    level: "light roast",
+    level: "light-medium roast, always rotating",
     moment:
-      "The first cup, before anyone needs anything from you. A light roast for the pour-over you make slowly, on purpose.",
-    tastesLike: "floral and bright, we think. the roaster gets the final word.",
+      "The one that wanders. A new light-medium coffee every few months, wherever the beans take us next. Same bird, different sky. Brew it slowly and let your mind go somewhere.",
+    tastesLike: "changes with each new coffee. usually bright, a little sweet, sometimes floral. the bag tells you which one you got.",
     bestFor: "drip, pour-over",
     drawingLabel: "a bird in flight, drawn in one line",
     drawing:
@@ -30,7 +28,6 @@ export const roasts: Roast[] = [
   {
     id: "the-usual",
     name: "the usual",
-    time: "11:15am",
     level: "house blend",
     moment:
       "The one you don't have to think about. Chocolatey and steady, good on its own or under a lot of milk.",
@@ -43,12 +40,11 @@ export const roasts: Roast[] = [
   {
     id: "late-show",
     name: "late show",
-    time: "3:30pm",
     level: "decaf",
     moment:
-      "The afternoon cup that still lets you sleep. All of the coffee, none of the buzz.",
+      "The late cup that still lets you sleep. All of the coffee, none of the buzz.",
     tastesLike: "whatever the beans turn out to be, minus the caffeine. notes soon.",
-    bestFor: "anything after 3pm",
+    bestFor: "after dinner, or whenever you want one more",
     drawingLabel: "a crescent moon and a star, drawn in one line",
     drawing:
       "M 96 26 C 60 30, 40 64, 52 98 C 62 126, 98 138, 124 120 C 96 122, 74 100, 76 72 C 78 52, 86 38, 96 26 C 100 22, 106 24, 104 30 C 102 34, 96 32, 98 28 M 118 46 C 120 54, 122 58, 130 60 C 122 62, 120 66, 118 74 C 116 66, 114 62, 106 60 C 114 58, 116 54, 118 46",
