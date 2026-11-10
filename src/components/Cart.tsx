@@ -2,8 +2,8 @@ import { WORDMARK_LINE } from "./wordmark";
 
 // The cart, in the same single periwinkle line as the roast drawings, with the
 // wordmark big on the front (brand guidelines: white cart, large wordmark).
-// After the intro it draws itself stroke by stroke (.cart in globals.css);
-// otherwise it's simply there.
+// After the intro it rolls in from the right as the wordmark settles
+// (.cart-roll in globals.css); otherwise it's simply there.
 const STROKES = [
   // the pavement
   "M 18 354 C 130 350, 280 356, 404 351",
@@ -20,6 +20,14 @@ const STROKES = [
   "M 358 208 C 376 206, 390 198, 396 180 C 399 170, 410 168, 409 178 C 408 186, 398 186, 397 178",
 ];
 
+// Indices into STROKES: what stays put, what turns, what rides along.
+const PAVEMENT = STROKES[0];
+const WHEELS = [
+  { d: STROKES[1], hub: "110px 326px" },
+  { d: STROKES[2], hub: "310px 326px" },
+];
+const BODY = STROKES.slice(3);
+
 export function Cart({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -35,18 +43,31 @@ export function Cart({ className = "" }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {STROKES.map((d, k) => (
-          <path key={k} d={d} pathLength={1} style={{ "--k": k } as React.CSSProperties} />
-        ))}
-        {/* the wordmark on the front, centred on the panel */}
-        <path
-          d={WORDMARK_LINE}
-          pathLength={1}
-          transform="translate(100 196) scale(0.8)"
-          strokeWidth={3.2}
-          className="cart-mark"
-          style={{ "--k": STROKES.length } as React.CSSProperties}
-        />
+        <path d={PAVEMENT} />
+        {/* after the intro, everything here rolls in from the right (.cart-roll in globals.css) */}
+        <g className="cart-roll">
+          <g className="cart-rock">
+            {BODY.map((d, k) => (
+              <path key={k} d={d} />
+            ))}
+            {/* the wordmark on the front, centred on the panel; writes itself once the cart parks */}
+            <path
+              d={WORDMARK_LINE}
+              pathLength={1}
+              transform="translate(100 196) scale(0.8)"
+              strokeWidth={3.2}
+              className="cart-mark"
+            />
+          </g>
+          {WHEELS.map((w) => (
+            <path
+              key={w.hub}
+              d={w.d}
+              className="cart-wheel"
+              style={{ transformOrigin: w.hub }}
+            />
+          ))}
+        </g>
       </g>
     </svg>
   );

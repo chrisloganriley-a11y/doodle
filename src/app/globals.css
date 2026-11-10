@@ -255,33 +255,73 @@ html[data-intro="done"] .type-hl::before {
   }
 }
 
-/* The hero cart draws itself stroke by stroke after the tagline types out.
-   Drawn by default; only erased while the intro plays. */
-.cart path {
+/* The hero cart rolls in from the right, already drawn, while the wordmark
+   moves into the header: wheels turning, a little rock as it stops. Parked
+   off-screen only while the intro plays; otherwise simply there. */
+.hero {
+  overflow-x: clip;
+}
+.cart-wheel,
+.cart-rock {
+  transform-box: view-box;
+}
+.cart-rock {
+  transform-origin: 210px 300px;
+}
+html[data-intro="play"] .cart-roll {
+  transform: translateX(100vw);
+  animation: intro-home 0s 6s forwards;
+}
+html[data-intro="done"] .cart-roll {
+  animation: cart-roll-in 1500ms cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+html[data-intro="done"] .cart-wheel {
+  animation: cart-wheel 1500ms cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+html[data-intro="done"] .cart-rock {
+  animation: cart-rock 700ms ease-in-out 1350ms both;
+}
+.cart-mark {
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
 }
-html[data-intro="play"] .cart path {
+html[data-intro="play"] .cart-mark {
   stroke-dashoffset: 1;
   animation: intro-drawn 0s 6s forwards;
 }
-html[data-intro="done"] .cart path {
-  animation: cart-draw 700ms cubic-bezier(0.45, 0, 0.3, 1) both;
-  animation-delay: calc(var(--rise-start) + var(--k) * 180ms);
-}
-html[data-intro="done"] .cart .cart-mark {
-  animation-duration: 1400ms;
+html[data-intro="done"] .cart-mark {
+  animation: cart-draw 1400ms cubic-bezier(0.45, 0, 0.3, 1) 1550ms both;
 }
 @keyframes cart-draw {
   from {
     stroke-dashoffset: 1;
   }
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 @keyframes intro-drawn {
   to {
     stroke-dashoffset: 0;
+  }
+}
+@keyframes cart-roll-in {
+  from {
+    transform: translateX(100vw);
+  }
+}
+@keyframes cart-wheel {
+  from {
+    transform: rotate(1080deg);
+  }
+}
+@keyframes cart-rock {
+  35% {
+    transform: rotate(-1.6deg);
+  }
+  70% {
+    transform: rotate(0.6deg);
+  }
+}
+@keyframes intro-home {
+  to {
+    transform: none;
   }
 }

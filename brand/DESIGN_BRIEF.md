@@ -27,9 +27,9 @@ Warm, unfussy, a little wry, handmade. Calm rather than loud. It should feel lik
 
 | Roast | What it is | Best for | Drawing | Highlighter |
 | --- | --- | --- | --- | --- |
-| *daydream* | light roast, floral and fun | drip, pour-over | a bird in flight | blush |
+| *daydream* | rotating light-medium roast, a new coffee every few months | drip, pour-over | a bird in flight | blush |
 | *the usual* | house medium blend, chocolatey | espresso on its own, or in a latte | a mug with looping steam | butter |
-| *late show* | decaf | anything after 3pm | a moon and star | lilac |
+| *late show* | decaf | after dinner | a moon and star | lilac |
 
 Tasting notes are placeholders until the roaster picks the beans.
 

@@ -37,7 +37,7 @@ Specialty coffee without the snobbery, drawn by hand, roasted in Philly. A pantr
 
 - v1 has no checkout. A shop and subscriptions come later, once the roaster confirms fulfillment.
 - Email signup: provider undecided. The form is built against a placeholder endpoint.
-- Lineup at launch: *daydream* (light roast, drip/pour-over), *the usual* (house medium blend, espresso or latte), *late show* (decaf, after 3pm). Tasting notes are placeholders until the roaster picks the beans.
+- Lineup at launch: *daydream* (rotating light-medium roast, a new coffee every few months; drip/pour-over), *the usual* (house medium blend, espresso or latte), *late show* (decaf, for night). Tasting notes are placeholders until the roaster picks the beans.
 - Cart schedule: no dates or locations confirmed yet. Don't invent them.
 - Prices are not final. Don't publish them.
 - Trademark for "doodle" not yet cleared.
