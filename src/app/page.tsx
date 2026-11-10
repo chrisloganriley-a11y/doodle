@@ -1,17 +1,22 @@
 import { DayLine } from "@/components/DayLine";
 import { Drawing } from "@/components/Drawing";
+import { Intro, INTRO_SCRIPT } from "@/components/Intro";
 import { roasts } from "@/components/roasts";
 import { SignupForm } from "@/components/SignupForm";
+import { TypedLine } from "@/components/TypedLine";
 
-function Wordmark({ className = "" }: { className?: string }) {
+function Wordmark(props: React.ImgHTMLAttributes<HTMLImageElement> & Record<`data-${string}`, string>) {
   // The drawn wordmark, as drawn. Never retyped.
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src="/brand/doodle-wordmark-periwinkle.svg" alt="doodle" className={className} />;
+  return <img src="/brand/doodle-wordmark-periwinkle.svg" alt="doodle" {...props} />;
 }
 
 export default function Home() {
   return (
     <>
+      {/* Decides before first paint whether the intro plays (see Intro.tsx). */}
+      <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
+      <Intro />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-doodle focus:bg-paper focus:px-4 focus:py-2"
@@ -21,14 +26,17 @@ export default function Home() {
 
       <header className="sticky top-0 z-40 bg-paper/95 px-[var(--gutter)]">
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between gap-8">
-          <a href="#top" aria-label="doodle, back to the top" className="shrink-0">
-            <Wordmark className="h-auto w-[104px] sm:w-[124px]" />
+          <a
+            href="#say-hi"
+            className="link-hl intro-rise inline-flex min-h-11 shrink-0 items-center text-[15px]"
+          >
+            say hi →
           </a>
-          <div className="hidden w-full max-w-[340px] md:block">
+          <div className="intro-rise hidden w-full max-w-[340px] md:block">
             <DayLine compact />
           </div>
-          <a href="#say-hi" className="link-hl inline-flex min-h-11 shrink-0 items-center text-[15px]">
-            say hi →
+          <a href="#top" aria-label="doodle, back to the top" className="shrink-0">
+            <Wordmark data-intro-target="" className="h-auto w-[104px] sm:w-[124px]" />
           </a>
         </div>
       </header>
@@ -37,21 +45,30 @@ export default function Home() {
         {/* first viewport: the offer, the action, and the day */}
         <section
           id="top"
-          className="flex min-h-[calc(100svh-72px)] flex-col justify-between px-[var(--gutter)] pb-8 pt-10 sm:pt-16"
+          className="hero flex min-h-[calc(100svh-72px)] flex-col justify-between px-[var(--gutter)] pb-8 pt-10 sm:pt-16"
         >
           <div className="mx-auto w-full max-w-[1280px]">
-            <h1 className="serif max-w-[11ch] text-[clamp(46px,8.4vw,96px)] leading-[0.98]">
-              coffee for every part of your <span className="hl">day</span>.
+            {/* the tagline types itself out once the wordmark lands */}
+            <h1 className="serif text-[clamp(40px,8vw,96px)] leading-[0.98]">
+              <TypedLine lines={[["pretty good coffee,"], ["roasted in ", { hl: "philly" }, "."]]} />
             </h1>
-            <p className="mt-8 max-w-[46ch] text-[15px] sm:text-[16px]">
-              pretty good coffee, roasted in philly. a little cart is coming to philly sidewalks,
-              with three bags you can take home.
+            <p
+              style={{ "--i": 0 } as React.CSSProperties}
+              className="intro-rise serif mt-7 text-[clamp(24px,3vw,34px)]"
+            >
+              coffee for every part of your day.
             </p>
-            <div className="mt-8">
+            <p
+              style={{ "--i": 1 } as React.CSSProperties}
+              className="intro-rise mt-6 max-w-[46ch] text-[15px] sm:text-[16px]"
+            >
+              a little cart is coming to philly sidewalks, with three bags you can take home.
+            </p>
+            <div style={{ "--i": 2 } as React.CSSProperties} className="intro-rise mt-8">
               <SignupForm />
             </div>
           </div>
-          <div className="mx-auto mt-14 w-full max-w-[1280px]">
+          <div style={{ "--i": 3 } as React.CSSProperties} className="intro-rise mx-auto mt-14 w-full max-w-[1280px]">
             <DayLine />
           </div>
         </section>
@@ -116,9 +133,9 @@ export default function Home() {
               <div>
                 <h3 className="font-medium">the cart</h3>
                 <p className="mt-2 max-w-[48ch]">
-                  hot coffee, iced coffee and lattes, from a little white cart with a big doodle on
-                  the front. we&apos;re sorting out the permits now. once we&apos;re rolling, this is
-                  where you&apos;ll find where we&apos;re parked each weekend.
+                  a little white cart with a big doodle on the front. we&apos;re still working out
+                  the menu, and sorting out the permits. once we&apos;re rolling, this is where
+                  you&apos;ll find what we&apos;re pouring and where we&apos;re parked each weekend.
                 </p>
               </div>
               <div>

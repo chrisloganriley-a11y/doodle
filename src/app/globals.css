@@ -125,27 +125,127 @@ a {
   transform: scaleX(1);
 }
 
-/* Drawings draw themselves once, as they arrive. Visible by default. */
+/* Drawings follow the scroll (Drawing.tsx sets the offset). Drawn by default. */
 .drawing path {
   stroke-dasharray: 1;
   stroke-dashoffset: 0;
 }
-.drawing[data-state="armed"] path {
+
+/* The intro: the wordmark draws itself on a blank page, then moves into the
+   header. Only runs when an inline script sets html[data-intro="play"] before
+   first paint (src/components/Intro.tsx). If the page's JS never arrives, the
+   failsafe animations put everything back after a few seconds. */
+.intro {
+  display: none;
+}
+html[data-intro] .intro {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+  animation: intro-gone 0s 6s forwards;
+}
+html[data-intro] .intro[data-phase="moving"] {
+  background: transparent;
+  pointer-events: none;
+  transition: background-color 600ms var(--ease-out);
+}
+html[data-intro] .intro[data-phase="landed"] {
+  display: none;
+}
+.intro-mark {
+  width: min(78vw, 620px);
+  height: auto;
+  overflow: visible;
+  transform-origin: 0 0;
+}
+.intro-mark path {
+  stroke-dasharray: 1;
   stroke-dashoffset: 1;
 }
-.drawing[data-state="drawn"] path {
+.intro-mark[data-state="drawing"] path {
   stroke-dashoffset: 0;
-  transition: stroke-dashoffset 2200ms var(--ease-out);
+  transition: stroke-dashoffset var(--draw-ms) cubic-bezier(0.45, 0, 0.3, 1);
+}
+html[data-intro] [data-intro-target]:not([data-landed]) {
+  visibility: hidden;
+  animation: intro-back 0s 6s forwards;
+}
+html[data-intro="play"] .intro-rise {
+  opacity: 0;
+  animation: intro-back 0s 6s forwards;
+}
+html[data-intro="done"] .intro-rise {
+  animation: intro-rise 800ms var(--ease-out) both;
+  animation-delay: calc(var(--rise-start, 0ms) + var(--i, 0) * 110ms);
+}
+
+/* The tagline types out once the wordmark has landed, the highlighter swipes
+   under "philly", then the rest of the hero rises. 38 letters at --type-step. */
+:root {
+  --type-start: 350ms;
+  --type-step: 42ms;
+  --type-end: calc(var(--type-start) + 38 * var(--type-step));
+}
+.hero {
+  --rise-start: calc(var(--type-end) + 250ms);
+}
+html[data-intro="play"] .type-ch,
+html[data-intro="play"] .type-hl::before {
+  opacity: 0;
+  animation: intro-back 0s 6s forwards;
+}
+html[data-intro="done"] .type-ch {
+  animation: type-in 1ms both;
+  animation-delay: calc(var(--type-start) + var(--c) * var(--type-step));
+}
+html[data-intro="done"] .type-hl::before {
+  transform-origin: left;
+  animation: hl-swipe 450ms var(--ease-out) both;
+  animation-delay: var(--type-end);
+}
+@keyframes type-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes hl-swipe {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes intro-gone {
+  to {
+    visibility: hidden;
+  }
+}
+@keyframes intro-back {
+  to {
+    visibility: visible;
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none !important;
+  }
   html {
     scroll-behavior: auto;
   }
-  .drawing path,
-  .drawing[data-state] path {
-    stroke-dashoffset: 0;
-    transition: none;
+  .drawing path {
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
   }
   .link-hl::before {
     transition: none;
