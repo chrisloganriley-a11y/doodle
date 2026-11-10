@@ -1,3 +1,4 @@
+import { Cart } from "@/components/Cart";
 import { DayLine } from "@/components/DayLine";
 import { Drawing } from "@/components/Drawing";
 import { Intro, INTRO_SCRIPT } from "@/components/Intro";
@@ -25,18 +26,18 @@ export default function Home() {
       </a>
 
       <header className="sticky top-0 z-40 bg-paper/95 px-[var(--gutter)]">
-        <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between gap-8">
+        <div className="mx-auto flex h-[72px] max-w-[1280px] lg:h-[88px] items-center justify-between gap-8">
+          <a href="#top" aria-label="doodle, back to the top" className="shrink-0">
+            <Wordmark data-intro-target="" className="h-auto w-[112px] sm:w-[132px] lg:w-[164px]" />
+          </a>
+          <div className="intro-rise hidden w-full max-w-[340px] md:block">
+            <DayLine compact />
+          </div>
           <a
             href="#say-hi"
             className="link-hl intro-rise inline-flex min-h-11 shrink-0 items-center text-[15px]"
           >
             say hi →
-          </a>
-          <div className="intro-rise hidden w-full max-w-[340px] md:block">
-            <DayLine compact />
-          </div>
-          <a href="#top" aria-label="doodle, back to the top" className="shrink-0">
-            <Wordmark data-intro-target="" className="h-auto w-[104px] sm:w-[124px]" />
           </a>
         </div>
       </header>
@@ -45,11 +46,12 @@ export default function Home() {
         {/* first viewport: the offer, the action, and the day */}
         <section
           id="top"
-          className="hero flex min-h-[calc(100svh-72px)] flex-col justify-between px-[var(--gutter)] pb-8 pt-10 sm:pt-16"
+          className="hero flex min-h-[calc(100svh-72px)] lg:min-h-[calc(100svh-88px)] flex-col justify-between px-[var(--gutter)] pb-8 pt-10 sm:pt-16"
         >
-          <div className="mx-auto w-full max-w-[1280px]">
+          <div className="mx-auto w-full max-w-[1280px] lg:grid lg:grid-cols-[1fr_auto] lg:items-center lg:gap-12">
+            <div>
             {/* the tagline types itself out once the wordmark lands */}
-            <h1 className="serif text-[clamp(40px,8vw,96px)] leading-[0.98]">
+            <h1 className="serif text-[clamp(40px,6.4vw,76px)] leading-[0.98]">
               <TypedLine lines={[["pretty good coffee,"], ["roasted in ", { hl: "philly" }, "."]]} />
             </h1>
             <p
@@ -67,6 +69,9 @@ export default function Home() {
             <div style={{ "--i": 2 } as React.CSSProperties} className="intro-rise mt-8">
               <SignupForm />
             </div>
+            </div>
+            {/* the cart, where a wide screen has room for it */}
+            <Cart className="hidden h-auto w-[min(36vw,500px)] lg:block" />
           </div>
           <div style={{ "--i": 3 } as React.CSSProperties} className="intro-rise mx-auto mt-14 w-full max-w-[1280px]">
             <DayLine />
