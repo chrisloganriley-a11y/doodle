@@ -52,7 +52,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${dmMono.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${fraunces.variable} ${dmMono.variable}`}>
       <body>{children}</body>
     </html>
   );
