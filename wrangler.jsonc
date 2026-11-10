@@ -13,7 +13,7 @@
   "vars": {
     // Kit form id (a number, as a string). Empty means signups are off and the
     // form says so. KIT_API_KEY is a secret: npx wrangler secret put KIT_API_KEY
-    "KIT_FORM_ID": ""
+    "KIT_FORM_ID": "10168850"
   },
   // Needs doodlecoffee.shop active as a zone in this Cloudflare account first
   // (Porkbun nameservers pointed at Cloudflare). Wrangler creates the DNS record.
