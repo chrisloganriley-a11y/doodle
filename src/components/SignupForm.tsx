@@ -2,10 +2,9 @@
 
 import { useId, useState } from "react";
 
-// Where signups go. Undecided (Kit, Buttondown, or a Cloudflare Worker), so it
-// is read from the environment at build time. Any endpoint that accepts a
-// form POST with an `email` field works.
-const ENDPOINT = process.env.NEXT_PUBLIC_SIGNUP_ENDPOINT ?? "";
+// Signups go to the Cloudflare Worker (worker/index.ts), which adds them to Kit.
+// It only exists under `npm run preview` or once deployed, not `npm run dev`.
+const ENDPOINT = "/api/subscribe";
 
 type Status = "idle" | "sending" | "done" | "error";
 
@@ -17,15 +16,7 @@ export function SignupForm({ button = "tell me when" }: { button?: string }) {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const email = new FormData(form).get("email");
-
-    if (!ENDPOINT) {
-      setStatus("error");
-      setMessage(
-        "signups aren't switched on yet. try again in a few days, or catch us at the cart.",
-      );
-      return;
-    }
+    const data = new FormData(form);
 
     setStatus("sending");
     setMessage("");
@@ -33,15 +24,30 @@ export function SignupForm({ button = "tell me when" }: { button?: string }) {
       const res = await fetch(ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
-        body: new URLSearchParams({ email: String(email) }),
+        body: new URLSearchParams({
+          email: String(data.get("email") ?? ""),
+          company: String(data.get("company") ?? ""),
+        }),
       });
+      if (res.status === 422) {
+        setStatus("error");
+        setMessage("that address doesn't look right. check it and try once more.");
+        return;
+      }
+      if (res.status === 503 || res.status === 404) {
+        setStatus("error");
+        setMessage(
+          "signups aren't switched on yet. try again in a few days, or catch us at the cart.",
+        );
+        return;
+      }
       if (!res.ok) throw new Error(String(res.status));
       setStatus("done");
       setMessage("you're on the list. we'll write when the cart is out.");
       form.reset();
     } catch {
       setStatus("error");
-      setMessage("that didn't go through. check the address and try once more.");
+      setMessage("that didn't go through on our end. try again in a minute.");
     }
   }
 
@@ -54,7 +60,12 @@ export function SignupForm({ button = "tell me when" }: { button?: string }) {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate={false} className="w-full max-w-[520px]">
+    <form onSubmit={onSubmit} className="relative w-full max-w-[520px]">
+      {/* Hidden from people; bots fill it in and get quietly dropped. */}
+      <div aria-hidden="true" className="absolute left-[-9999px] h-px w-px overflow-hidden">
+        <label htmlFor={`${id}-company`}>company</label>
+        <input id={`${id}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <label htmlFor={`${id}-email`} className="mb-2 block text-[13px] font-medium">
         your email
       </label>

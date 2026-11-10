@@ -124,8 +124,9 @@ export default function Home() {
               <div>
                 <h3 className="font-medium">the bag</h3>
                 <p className="mt-2 max-w-[48ch]">
-                  12 oz of whole bean, roasted in philly. take one home from the cart, or have one
-                  sent to you once the shop opens.
+                  12 oz of whole bean, roasted in philly. take one home from the cart. soon you can
+                  subscribe and pick yours up at the cart each time, or have two or more sent to
+                  you.
                 </p>
               </div>
               <div>

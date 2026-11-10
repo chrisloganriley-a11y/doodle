@@ -14,9 +14,21 @@ npm run preview    # build, then serve it the way Cloudflare will
 npm run deploy     # build, then wrangler deploy
 ```
 
-## Email signup
+## Pages
 
-The form POSTs `email` to `NEXT_PUBLIC_SIGNUP_ENDPOINT`, which is read at build time. Until that's set, the form says signups aren't on yet; it never pretends to save an address. Set it in `.env.local` (dev) and in the build environment (deploy) once a provider is picked.
+- `/` — the launch page
+- `/hi` — the page every bag's QR code points to (reorder, brew guide, the cart). **It's printed on packaging, so never move it.**
+
+## Email signup (Kit)
+
+The form POSTs to `/api/subscribe`, handled by the Worker in `worker/index.ts`. The Worker creates the subscriber in Kit and adds them to a form, keeping the API key server-side. It has a honeypot field for bots. Until Kit is configured, it returns 503 and the form says signups aren't on yet, so it never pretends to save an address.
+
+1. Create a free Kit account and a form (Grow → Landing Pages & Forms). Copy the form's id from its URL.
+2. Put the id in `wrangler.jsonc` → `vars.KIT_FORM_ID`.
+3. Create a v4 API key (Settings → Developer) and run `npx wrangler secret put KIT_API_KEY`.
+4. `npm run preview` and submit a real address to test, then `npm run deploy`.
+
+`/api/subscribe` only exists under `npm run preview` or once deployed. Under `npm run dev`, the form shows "not switched on".
 
 ## Domain: Porkbun → Cloudflare (one time)
 
